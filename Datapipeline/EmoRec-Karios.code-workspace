@@ -1,0 +1,13 @@
+{
+	"folders": [
+		{
+			"name": "EmoRec-Karios",
+			"path": ".."
+		},
+		{
+			"name": "Datapipeline",
+			"path": "."
+		}
+	],
+	"settings": {}
+}

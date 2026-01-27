@@ -19,7 +19,7 @@ void setup() {
 
   bno.begin();
 
-  delay(100);   // small settle time
+  delay(100);   
   printHeader();
 }
 
@@ -31,17 +31,19 @@ void loop() {
   // IMU vectors
   sensors_event_t accelEvent, gyroEvent, orientEvent;
 
-  bno.getEvent(&accelEvent, Adafruit_BNO055::VECTOR_ACCELEROMETER);
-  bno.getEvent(&gyroEvent,  Adafruit_BNO055::VECTOR_GYROSCOPE);
-  bno.getEvent(&orientEvent,Adafruit_BNO055::VECTOR_EULER);
+  imu::Vector<3> acc = bno.getVector(Adafruit_BNO055::VECTOR_ACCELEROMETER);
+  imu::Vector<3> gyr = bno.getVector(Adafruit_BNO055::VECTOR_GYROSCOPE);
 
-  float ax = accelEvent.acceleration.x;
-  float ay = accelEvent.acceleration.y;
-  float az = accelEvent.acceleration.z;
+  sensors_event_t orientEvent;
+  bno.getEvent(&orientEvent, Adafruit_BNO055::VECTOR_EULER);
 
-  float gx = gyroEvent.gyro.x;
-  float gy = gyroEvent.gyro.y;
-  float gz = gyroEvent.gyro.z;
+  float ax = acc.x();
+  float ay = acc.y();
+  float az = acc.z();
+
+  float gx = gyr.x();
+  float gy = gyr.y();
+  float gz = gyr.z();
 
   float roll  = orientEvent.orientation.roll;
   float pitch = orientEvent.orientation.pitch;
@@ -49,10 +51,10 @@ void loop() {
 
 
   // EMG raw
-  int emg = analogRead(EMG_PIN);
+  //int emg = analogRead(EMG_PIN);
 
   // Printing data on serial for python file to read
-  Serial.print(now); Serial.print(",");
+  //Serial.print(now); Serial.print(",");
 
   Serial.print(ax, 6); Serial.print(",");
   Serial.print(ay, 6); Serial.print(",");
@@ -66,5 +68,5 @@ void loop() {
   Serial.print(pitch, 6); Serial.print(",");
   Serial.print(yaw, 6);   Serial.print(",");
 
-  Serial.println(emg);
+  //Serial.println(emg);
 }

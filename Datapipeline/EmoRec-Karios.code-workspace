@@ -1,0 +1,16 @@
+{
+	"folders": [
+		{
+			"path": ".."
+		},
+		{
+			"name": "260127-182838-nano33ble",
+			"path": "../../../PlatformIO/Projects/260127-182838-nano33ble"
+		},
+		{
+			"name": "Datapipeline",
+			"path": "."
+		}
+	],
+	"settings": {}
+}

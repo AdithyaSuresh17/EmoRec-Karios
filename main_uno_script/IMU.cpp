@@ -74,3 +74,7 @@ void IMU::getSensorData() {
 //  Serial.print(" || z_angVel: ");
 //  Serial.print(this->z_angVel);
 }
+
+int IMU::getRoll() {
+  return this->roll;
+}

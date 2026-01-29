@@ -5,6 +5,7 @@ class IMU {
     IMU(Adafruit_BNO055*); // Constructor
     void init();
     void getSensorData();
+    int getRoll();
 
   private:
     Adafruit_BNO055* bno; // Pointer to BNO object this class instance is made for

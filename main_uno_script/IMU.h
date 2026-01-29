@@ -1,10 +1,23 @@
 #include <Arduino.h>
 
+// Struct definition
+struct imuData {
+      float ax;
+      float ay;
+      float az;
+      float r;
+      float p;
+      float y;
+      float avx;
+      float avy;
+      float avz;
+    };
+
 class IMU {
   public:
     IMU(Adafruit_BNO055*); // Constructor
     void init();
-    void getSensorData();
+    imuData getSensorData();
     int getRoll();
 
   private:

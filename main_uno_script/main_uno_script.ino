@@ -51,13 +51,20 @@ void loop() {
 //  delay(100);
 
   // Send IMU values to BLE Sense
-  imu1.getSensorData();
+  imuData imu_data_pkt1;
+  imuData imu_data_pkt2;
+  imu_data_pkt1 = imu1.getSensorData();
   delay(100);
-  imu2.getSensorData();
+  imu_data_pkt2 = imu2.getSensorData();
   delay(100);
-  int data_to_send = imu1.getRoll();
-  Serial.println(data_to_send);
-  sense_link.println(data_to_send);
-  delay(100);
+
+  const uint8_t start_byte = 0xAA; // Initialise a start byte flag
+  sense_link.write(start_byte);
+  sense_link.write((uint8_t*)&imu_data_pkt1, sizeof(imu_data_pkt1));
+  
+//  int data_to_send = imu1.getRoll();
+//  Serial.println(data_to_send);
+//  sense_link.println(data_to_send);
+//  delay(100);
 
 }

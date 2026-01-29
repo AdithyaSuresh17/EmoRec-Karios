@@ -25,8 +25,8 @@ void IMU::init() {
   this->bno->setExtCrystalUse(true);
 }
 
-// Read IMU sensor data
-void IMU::getSensorData() {
+// Read IMU sensor data, and return
+imuData IMU::getSensorData() {
   /* Get sensor angle data */
   // Read data
   sensors_event_t event;
@@ -73,6 +73,20 @@ void IMU::getSensorData() {
 //  Serial.print(this->y_angVel);
 //  Serial.print(" || z_angVel: ");
 //  Serial.print(this->z_angVel);
+
+  // Place values into an output struct
+  imuData data;
+  data.ax = this->x_acc;
+  data.ay = this->y_acc;
+  data.az = this->z_acc;
+  data.r = this->roll;
+  data.p = this->pitch;
+  data.y = this->yaw;
+  data.avx = this->x_angVel;
+  data.avy = this->y_angVel;
+  data.avz = this->z_angVel;
+  
+  return data;
 }
 
 int IMU::getRoll() {

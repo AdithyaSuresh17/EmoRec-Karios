@@ -1,3 +1,6 @@
+#run file while keeping in mind the COM port to which arduino is connected to 
+#python3 src/log_serial_to_csv_live.py <USB_Com_Port>
+
 import csv
 import sys
 import time

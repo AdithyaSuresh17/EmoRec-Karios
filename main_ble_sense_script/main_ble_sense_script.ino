@@ -16,8 +16,10 @@ void setup() {
   // Serial initialisations
   Serial.begin(115200); // For USB serial monitor
   Serial1.begin(9600); // For UART from Uno
-
+  delay(2000);
   pinMode(LED_BUILTIN, OUTPUT); // Initialise built in LED for debugging
+  Serial.println("t_ms,ax,ay,az,gx,gy,gz,yaw,pitch,roll");//printing header
+
 
 }
 

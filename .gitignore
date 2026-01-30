@@ -44,6 +44,12 @@ MANIFEST
 pip-log.txt
 pip-delete-this-directory.txt
 
+#pio stuff
+data/
+ble-updated-code/
+uno-code/  
+
+
 # Unit test / coverage reports
 htmlcov/
 .tox/

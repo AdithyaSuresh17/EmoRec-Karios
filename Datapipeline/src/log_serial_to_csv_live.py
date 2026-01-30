@@ -23,22 +23,27 @@ def main():
 
     with serial.Serial(port, BAUD, timeout=1) as ser, out_path.open("w", newline="") as f:
         # Reset/settle helps on macOS + Uno
+        
         try:
             ser.setDTR(False)
             time.sleep(0.2)
             ser.reset_input_buffer()
             ser.setDTR(True)
-            time.sleep(1.0)
-        except Exception:
+            time.sleep(2.0)  # Increase to 2 seconds
+            print(f"Connected to {port}, waiting for data...")  # Add this
+        
+
+        except Exception as e:
+            print(f"DTR reset failed: {e}")  # Add this
             pass
+        writer = csv.writer(f)  # Initialize writer
+        header = header = ["t_ms", "ax", "ay", "az", "gx", "gy", "gz", "yaw", "pitch", "roll"]  # Hardcoded  # Initialize header
+        start = time.time()  # Initialize start time
 
-        writer = csv.writer(f)
-
-        # Wait for header
-        header = None
-        start = time.time()
+        # In the header-waiting loop, add debug:
         while header is None:
             line = ser.readline().decode("utf-8", errors="ignore").strip()
+            print(f"DEBUG: Received line: '{line}'")  # Add this to see what's coming in
             if not line:
                 if time.time() - start > 8:
                     raise RuntimeError("No header received. Check baud/port and that nothing else is using the port.")

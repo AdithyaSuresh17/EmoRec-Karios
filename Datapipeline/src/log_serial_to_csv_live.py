@@ -29,7 +29,7 @@ def main():
             time.sleep(0.2)
             ser.reset_input_buffer()
             ser.setDTR(True)
-            time.sleep(2.0)  # Increase to 2 seconds
+            time.sleep(2.0)  
             print(f"Connected to {port}, waiting for data...")  # Add this
         
 
@@ -37,16 +37,16 @@ def main():
             print(f"DTR reset failed: {e}")  # Add this
             pass
         writer = csv.writer(f)  # Initialize writer
-        header = header = ["t_ms", "ax", "ay", "az", "gx", "gy", "gz", "yaw", "pitch", "roll"]  # Hardcoded  # Initialize header
+        header = header = ["t_ms", "ax", "ay", "az", "gx", "gy", "gz", "yaw", "pitch", "roll"]  # Hardcoded  
         start = time.time()  # Initialize start time
 
         # In the header-waiting loop, add debug:
         while header is None:
             line = ser.readline().decode("utf-8", errors="ignore").strip()
-            print(f"DEBUG: Received line: '{line}'")  # Add this to see what's coming in
+            print(f"DEBUG: Received line: '{line}'")  
             if not line:
                 if time.time() - start > 8:
-                    raise RuntimeError("No header received. Check baud/port and that nothing else is using the port.")
+                    raise RuntimeError("No header received. Busy arduino.")
                 continue
             if "t_ms" in line and "," in line:
                 header = [h.strip() for h in line.split(",")]

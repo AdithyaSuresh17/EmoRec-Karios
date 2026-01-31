@@ -55,7 +55,7 @@ def main():
                 print(",".join(["host_time_s"] + header))
                 break
 
-        # Stream rows
+        # Stream rows 
         try:
             while True:
                 line = ser.readline().decode("utf-8", errors="ignore").strip()

@@ -1,70 +1,74 @@
 #include <Adafruit_Sensor.h>
 #include <Adafruit_BNO055.h>
 #include "IMU.h"
-#include <SoftwareSerial.h> // For sending data from Uno to BLE Sense
+#include "EMG.h" 
+#include <SoftwareSerial.h>
 
-// Create objects
+// --- OBJECT CREATION ---
 Adafruit_BNO055 bno1 = Adafruit_BNO055(55, 0x28);
 Adafruit_BNO055 bno2 = Adafruit_BNO055(56, 0x29);
-IMU imu1(&bno1); // Pass in address of bno1 object
-IMU imu2(&bno2); // Pass in address of bno1 object
+IMU imu1(&bno1); 
+IMU imu2(&bno2); 
 
-// Initialise software serial
-// Uno TX (D9) --> Sense RX0
-// Uno RX (D8) --> Sense TX1
-SoftwareSerial sense_link(8,9);
+// Create two EMG objects on pins A0 and A3
+EMG emg1(A0); 
+EMG emg2(A3);
+
+// --- COMMUNICATIONS & CONTROL ---
+SoftwareSerial sense_link(8, 9);
+const int buttonPin = 2; // Pin for calibration toggle
 
 void setup() {
-  // put your setup code here, to run once:
-  // Serial initialisations
-  Serial.begin(115200); // For USB serial monitor
-  sense_link.begin(9600); // Baud for UART to BLE Sense
+  Serial.begin(115200);
+  sense_link.begin(9600);
   
+  pinMode(buttonPin, INPUT_PULLUP);
 
   // Initialise IMUs
   imu1.init();
   imu2.init();
-  
-  
 
+  // --- AUTO-CALIBRATION PHASE ---
+  Serial.println(">>> HOLD STILL: Press button to calibrate EMGs...");
+  while(digitalRead(buttonPin) == HIGH); // Wait for user to press button
+  
+  Serial.println(">>> Calibrating Baseline...");
+  emg1.calibrate(); // Performs the 200-sample average
+  emg2.calibrate();
+  
+  Serial.println(">>> Calibration Complete. Starting Transmission.");
+  delay(1000);
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
-  // TEST - Print IMU sensor data
-//  Serial.println("Print");
-//  delay(100);
-//  while(1) {
-//    Serial.print("imu1: ");
-//    imu1.getSensorData();
-//    delay(100);
-//    Serial.print(" ||| imu2: ");
-//    imu2.getSensorData();
-//    delay(100);
-//    Serial.println(" ");
-//  }
-
-  // TEST - Sending data to another Arduino
-//  sense_link.println(8); // Send value as ASCII + newline
-//  delay(100);
-//  sense_link.println(88); // Send value as ASCII + newline
-//  delay(100);
-
-  // Send IMU values to BLE Sense
+  // 1. Gather IMU Data
   imuData imu_data_pkt1;
   imuData imu_data_pkt2;
-  imu_data_pkt1 = imu1.getSensorData();
-  delay(100);
-  imu_data_pkt2 = imu2.getSensorData();
-  delay(100);
-
-  const uint8_t start_byte = 0xAA; // Initialise a start byte flag
-  sense_link.write(start_byte);
-  sense_link.write((uint8_t*)&imu_data_pkt1, sizeof(imu_data_pkt1));
   
-//  int data_to_send = imu1.getRoll();
-//  Serial.println(data_to_send);
-//  sense_link.println(data_to_send);
-//  delay(100);
+  imu_data_pkt1 = imu1.getSensorData();
+  delay(50); // Reduced delay for better responsiveness
+  imu_data_pkt2 = imu2.getSensorData();
+  delay(50);
 
+  // 2. Gather Processed EMG Data
+  int processedEMG1 = emg1.getProcessedData(); // Rectified & Smoothed
+  int processedEMG2 = emg2.getProcessedData();
+
+  // 3. Send Data to BLE Sense
+  const uint8_t start_byte = 0xAA;
+  sense_link.write(start_byte);
+  
+  // Sending IMU 1 packet
+  sense_link.write((uint8_t*)&imu_data_pkt1, sizeof(imu_data_pkt1));
+  // Sending IMU 2 packet
+  sense_link.write((uint8_t*)&imu_data_pkt2, sizeof(imu_data_pkt2));
+  
+  // Optional: Sending EMG values as raw bytes
+  sense_link.write((uint8_t*)&processedEMG1, sizeof(processedEMG1));
+  sense_link.write((uint8_t*)&processedEMG2, sizeof(processedEMG2));
+
+  // --- DEBUG MONITORING ---
+  Serial.print("EMG1: "); Serial.print(processedEMG1);
+  Serial.print(" | EMG2: "); Serial.print(processedEMG2);
+  Serial.print(" | Roll1: "); Serial.println(imu_data_pkt1.r);
 }

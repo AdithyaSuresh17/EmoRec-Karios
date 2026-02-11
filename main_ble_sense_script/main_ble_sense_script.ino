@@ -18,7 +18,7 @@ void setup() {
   Serial1.begin(9600); // For UART from Uno
   delay(2000);
   pinMode(LED_BUILTIN, OUTPUT); // Initialise built in LED for debugging
-  Serial.println("t_ms,ax,ay,az,gx,gy,gz,yaw,pitch,roll");//printing header
+  Serial.println("t_ms,ax,ay,az,gx,gy,gz,yaw,pitch,roll,emg1,emg2");//printing header
 
 
 }
@@ -30,6 +30,11 @@ void loop() {
     if(Serial1.read() == 0xAA) {
       imuData data;
       Serial1.readBytes((uint8_t*)&data, sizeof(data));
+    
+      uint16_t emg1 = 0;
+      uint16_t emg2 = 0;
+      Serial1.readBytes((uint8_t*)&emg1, sizeof(emg1));
+      Serial1.readBytes((uint8_t*)&emg2, sizeof(emg2));
 
       Serial.print(millis()); Serial.print(",");
       Serial.print(data.ax); Serial.print(",");
@@ -40,7 +45,10 @@ void loop() {
       Serial.print(data.y); Serial.print(",");
       Serial.print(data.avx); Serial.print(",");
       Serial.print(data.avy); Serial.print(",");
-      Serial.println(data.avz);
+      Serial.println(data.avz);Serial.print(",");
+      Serial.println(emg1);Serial.print(",");
+      Serial.println(emg2);
+
 
     }
 //    int data_in = Serial1.parseInt();

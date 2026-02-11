@@ -29,14 +29,18 @@ void loop() {
   if (Serial1.available()) {
     if(Serial1.read() == 0xAA) {
       imuData data;
-      Serial1.readBytes((uint8_t*)&data, sizeof(data));
-    
       uint16_t emg1 = 0;
       uint16_t emg2 = 0;
+
+      // Read IMU and EMG data
+      Serial1.readBytes((uint8_t*)&data, sizeof(data));
       Serial1.readBytes((uint8_t*)&emg1, sizeof(emg1));
       Serial1.readBytes((uint8_t*)&emg2, sizeof(emg2));
 
+      // Write millis
       Serial.print(millis()); Serial.print(",");
+      
+      // Write IMU 1 Data
       Serial.print(data.ax); Serial.print(",");
       Serial.print(data.ay); Serial.print(",");
       Serial.print(data.az); Serial.print(",");
@@ -46,7 +50,22 @@ void loop() {
       Serial.print(data.avx); Serial.print(",");
       Serial.print(data.avy); Serial.print(",");
       Serial.println(data.avz);Serial.print(",");
+
+      // Write IMU 2 data
+      Serial.print(data.ax); Serial.print(",");
+      Serial.print(data.ay); Serial.print(",");
+      Serial.print(data.az); Serial.print(",");
+      Serial.print(data.r); Serial.print(",");
+      Serial.print(data.p); Serial.print(",");
+      Serial.print(data.y); Serial.print(",");
+      Serial.print(data.avx); Serial.print(",");
+      Serial.print(data.avy); Serial.print(",");
+      Serial.println(data.avz);Serial.print(",");
+
+      // Write EMG 1 data
       Serial.println(emg1);Serial.print(",");
+
+      // Write EMG 2 data
       Serial.println(emg2);
 
 

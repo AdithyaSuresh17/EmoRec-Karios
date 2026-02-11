@@ -1,73 +1,86 @@
 const int emgPin = A3;
 const int buttonPin = 2;
 
-// --- CONFIGURATION ---
-const int numReadings = 10;   // Higher = Smoother line, but slightly slower lag
-int readings[numReadings];    // The array to store the readings
-int readIndex = 0;            // The index of the current reading
-long total = 0;               // The running total
-int average = 0;              // The final smoothed value
+// --- DSP & SMOOTHING VARIABLES ---
+const int numReadings = 10;
+int readings[numReadings];
+int readIndex = 0;
+long total = 0;
+int smoothedValue = 0;
 
-// Button Variables
-bool isRecording = false;
+// --- CALIBRATION VARIABLES ---
+int dynamicBaseline = 512; // Default starting point
+const int calSamples = 200; // Number of samples to average for baseline
+int calCount = 0;
+long calSum = 0;
+
+// --- STATE MACHINE ---
+enum State { IDLE, CALIBRATING, RECORDING };
+State currentState = IDLE;
+
 bool lastButtonState = HIGH;
 unsigned long debounceTime = 0;
 
 void setup() {
   Serial.begin(115200);
   pinMode(buttonPin, INPUT_PULLUP);
-
-  // Initialize the smoothing array to 0
-  for (int i = 0; i < numReadings; i++) {
-    readings[i] = 0;
-  }
+  for (int i = 0; i < numReadings; i++) readings[i] = 0;
 }
 
 void loop() {
-  // --- 1. CHECK BUTTON ---
+  // 1. BUTTON LOGIC (Transition between States)
   int buttonReading = digitalRead(buttonPin);
   if (buttonReading == LOW && lastButtonState == HIGH && millis() - debounceTime > 200) {
-    isRecording = !isRecording;
     debounceTime = millis();
-    if(isRecording) Serial.println("--- START ---");
-    else Serial.println("--- STOP ---");
+    
+    if (currentState == IDLE) {
+      currentState = CALIBRATING;
+      calCount = 0;
+      calSum = 0;
+      Serial.println("--- PHASE 1: CALIBRATING (STAY STILL) ---");
+    } else {
+      currentState = IDLE;
+      Serial.println("--- STOPPED ---");
+    }
   }
   lastButtonState = buttonReading;
 
-  // --- 2. READ & PROCESS EMG ---
-  if (isRecording) {
-    
-    // Step A: Read raw value
+  // 2. EXECUTE STATES
+  if (currentState == CALIBRATING) {
+    int raw = analogRead(emgPin);
+    calSum += raw;
+    calCount++;
+
+    if (calCount >= calSamples) {
+      dynamicBaseline = calSum / calSamples;
+      currentState = RECORDING;
+      Serial.print("--- BASELINE FOUND: ");
+      Serial.print(dynamicBaseline);
+      Serial.println(" | STARTING RECORDING ---");
+    }
+    delay(10); // 100Hz sampling
+  } 
+  
+  else if (currentState == RECORDING) {
     int rawValue = analogRead(emgPin);
     
-    // Step B: RECTIFY (Center the signal and make it positive)
-    // Most EMG sensors sit at ~512 (2.5V) when neutral. 
-    // We subtract 512 to get "0" center, then take absolute value.
-    // NOTE: Adjust "512" if your sensor's resting value is different!
-    int rectifiedValue = abs(rawValue - 210); 
+    // RECTIFICATION using the Dynamic Baseline
+    int rectifiedValue = abs(rawValue - dynamicBaseline);
 
-    // Step C: RUNNING AVERAGE (Smoothing)
-    total = total - readings[readIndex];       // Subtract the oldest reading
-    readings[readIndex] = rectifiedValue;      // Add the new reading
-    total = total + readings[readIndex];       // Add the new reading to the total
-    readIndex = readIndex + 1;                 // Advance to the next position
+    // SMOOTHING (Moving Average)
+    total = total - readings[readIndex];
+    readings[readIndex] = rectifiedValue;
+    total = total + readings[readIndex];
+    readIndex = (readIndex + 1) % numReadings;
+    smoothedValue = total / numReadings;
 
-    if (readIndex >= numReadings) {            // Wrap around to the beginning
-      readIndex = 0;
-    }
-
-    average = total / numReadings;             // Calculate the average
-
-    // Step D: PRINT
-    // We print "0" and "1023" to stop the Serial Plotter from auto-scaling constantly
-    Serial.print(0);      // Lower bound
-    Serial.print(" ");
-    Serial.print(300);    // Upper bound (adjust if your flex goes higher)
-    Serial.print(" ");
-    Serial.println(average); // The clean signal
-    // Serial.println(rawValue); // The clean signal
-
+    // Output for Serial Plotter
+    Serial.print(0);             // Min line
+    Serial.print(",");
+    Serial.print(dynamicBaseline - 20);           // Max line
+    Serial.print(",");
+    Serial.println(smoothedValue);
     
-    delay(10); // Small delay to keep readable (100Hz approx)
+    delay(10);
   }
 }

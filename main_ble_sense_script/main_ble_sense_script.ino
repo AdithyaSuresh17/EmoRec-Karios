@@ -18,7 +18,7 @@ void setup() {
   Serial1.begin(9600); // For UART from Uno
   delay(2000);
   pinMode(LED_BUILTIN, OUTPUT); // Initialise built in LED for debugging
-  Serial.println("t_ms,ax,ay,az,gx,gy,gz,yaw,pitch,roll,emg1,emg2");//printing header
+  Serial.println("t_ms,ax,ay,az,gx,gy,gz,yaw,pitch,roll,emg1_data,emg2_data");//printing header
 
 
 }
@@ -28,45 +28,47 @@ void loop() {
   // Print to serial montior the values received
   if (Serial1.available()) {
     if(Serial1.read() == 0xAA) {
-      imuData data;
-      uint16_t emg1 = 0;
-      uint16_t emg2 = 0;
+      imuData imu1_data;
+      imuData imu2_data;
+      uint16_t emg1_data = 0;
+      uint16_t emg2_data = 0;
 
       // Read IMU and EMG data
-      Serial1.readBytes((uint8_t*)&data, sizeof(data));
-      Serial1.readBytes((uint8_t*)&emg1, sizeof(emg1));
-      Serial1.readBytes((uint8_t*)&emg2, sizeof(emg2));
+      Serial1.readBytes((uint8_t*)&imu1_data, sizeof(imu1_data));
+      Serial1.readBytes((uint8_t*)&imu2_data, sizeof(imu2_data));
+      Serial1.readBytes((uint8_t*)&emg1_data, sizeof(emg1_data));
+      Serial1.readBytes((uint8_t*)&emg2_data, sizeof(emg2_data));
 
       // Write millis
       Serial.print(millis()); Serial.print(",");
       
-      // Write IMU 1 Data
-      Serial.print(data.ax); Serial.print(",");
-      Serial.print(data.ay); Serial.print(",");
-      Serial.print(data.az); Serial.print(",");
-      Serial.print(data.r); Serial.print(",");
-      Serial.print(data.p); Serial.print(",");
-      Serial.print(data.y); Serial.print(",");
-      Serial.print(data.avx); Serial.print(",");
-      Serial.print(data.avy); Serial.print(",");
-      Serial.println(data.avz);Serial.print(",");
+      // Write IMU 1 data
+      Serial.print(imu1_data.ax); Serial.print(",");
+      Serial.print(imu1_data.ay); Serial.print(",");
+      Serial.print(imu1_data.az); Serial.print(",");
+      Serial.print(imu1_data.r); Serial.print(",");
+      Serial.print(imu1_data.p); Serial.print(",");
+      Serial.print(imu1_data.y); Serial.print(",");
+      Serial.print(imu1_data.avx); Serial.print(",");
+      Serial.print(imu1_data.avy); Serial.print(",");
+      Serial.println(imu1_data.avz);Serial.print(",");
 
       // Write IMU 2 data
-      Serial.print(data.ax); Serial.print(",");
-      Serial.print(data.ay); Serial.print(",");
-      Serial.print(data.az); Serial.print(",");
-      Serial.print(data.r); Serial.print(",");
-      Serial.print(data.p); Serial.print(",");
-      Serial.print(data.y); Serial.print(",");
-      Serial.print(data.avx); Serial.print(",");
-      Serial.print(data.avy); Serial.print(",");
-      Serial.println(data.avz);Serial.print(",");
+      Serial.print(imu2_data.ax); Serial.print(",");
+      Serial.print(imu2_data.ay); Serial.print(",");
+      Serial.print(imu2_data.az); Serial.print(",");
+      Serial.print(imu2_data.r); Serial.print(",");
+      Serial.print(imu2_data.p); Serial.print(",");
+      Serial.print(imu2_data.y); Serial.print(",");
+      Serial.print(imu2_data.avx); Serial.print(",");
+      Serial.print(imu2_data.avy); Serial.print(",");
+      Serial.println(imu2_data.avz);Serial.print(",");
 
       // Write EMG 1 data
-      Serial.println(emg1);Serial.print(",");
+      Serial.println(emg1_data);Serial.print(",");
 
       // Write EMG 2 data
-      Serial.println(emg2);
+      Serial.println(emg2_data);
 
 
     }

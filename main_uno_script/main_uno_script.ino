@@ -22,14 +22,14 @@ void setup() {
   Serial.begin(115200);
   sense_link.begin(9600);
   
-  pinMode(buttonPin, INPUT_PULLUP);
+  //pinMode(buttonPin, INPUT_PULLUP);
 
   // Initialise IMUs
   imu1.init();
   imu2.init();
 
   // --- AUTO-CALIBRATION PHASE ---
-  Serial.println(">>> HOLD STILL: Press button to calibrate EMGs...");
+  /*Serial.println(">>> HOLD STILL: Press button to calibrate EMGs...");
   while(digitalRead(buttonPin) == HIGH); // Wait for user to press button
   
   Serial.println(">>> Calibrating Baseline...");
@@ -37,7 +37,7 @@ void setup() {
   emg2.calibrate();
   
   Serial.println(">>> Calibration Complete. Starting Transmission.");
-  delay(1000);
+  delay(1000);*/
 }
 
 void loop() {
@@ -51,8 +51,8 @@ void loop() {
   delay(50);
 
   // 2. Gather Processed EMG Data
-  int processedEMG1 = emg1.getProcessedData(); // Rectified & Smoothed
-  int processedEMG2 = emg2.getProcessedData();
+  uint16_t processedEMG1 = (uint16_t) emg1.getProcessedData(); 
+  uint16_t processedEMG2 = (uint16_t) emg2.getProcessedData();
 
   // 3. Send Data to BLE Sense
   const uint8_t start_byte = 0xAA;
@@ -63,12 +63,15 @@ void loop() {
   // Sending IMU 2 packet
   sense_link.write((uint8_t*)&imu_data_pkt2, sizeof(imu_data_pkt2));
   
-  // Optional: Sending EMG values as raw bytes
+
+
   sense_link.write((uint8_t*)&processedEMG1, sizeof(processedEMG1));
   sense_link.write((uint8_t*)&processedEMG2, sizeof(processedEMG2));
 
   // --- DEBUG MONITORING ---
-  Serial.print("EMG1: "); Serial.print(processedEMG1);
+  /*Serial.print("EMG1: "); Serial.print(processedEMG1);
   Serial.print(" | EMG2: "); Serial.print(processedEMG2);
-  Serial.print(" | Roll1: "); Serial.println(imu_data_pkt1.r);
+  Serial.print(" | Roll1: "); Serial.print(imu_data_pkt1.r);
+  Serial.print(" | Roll2: "); Serial.println(imu_data_pkt2.r);*/
+
 }

@@ -48,6 +48,15 @@ pip-delete-this-directory.txt
 data/
 ble-updated-code/
 uno-code/  
+/Datapipeline/src
+/Datapipeline/test
+/Datapipeline/src
+/Datapipeline/.vscode
+/Datapipeline/platformio.ini
+/Datapipeline/EmoRec-Karios.code-workspace
+/Datapipeline/.gitignore
+#Allowing just the python file within the folder
+!log_serial_to_csv_live.py
 
 
 # Unit test / coverage reports

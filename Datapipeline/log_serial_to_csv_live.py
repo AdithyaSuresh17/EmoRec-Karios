@@ -19,7 +19,7 @@ def main():
 
     port = sys.argv[1]
     OUT_DIR.mkdir(parents=True, exist_ok=True)
-    out_path = OUT_DIR / time.strftime("imu_log_%Y%m%d_%H%M%S.csv")
+    out_path = OUT_DIR / time.strftime("data_log_%d%m%Y_%H%M%S.csv")
 
     with serial.Serial(port, BAUD, timeout=1) as ser, out_path.open("w", newline="") as f:
         # Reset/settle helps on macOS + Uno
@@ -37,23 +37,11 @@ def main():
             print(f"DTR reset failed: {e}")  # Add this
             pass
         writer = csv.writer(f)  # Initialize writer
-        header = header = ["t_ms", "ax", "ay", "az", "gx", "gy", "gz", "yaw", "pitch", "roll"]  # Hardcoded  
-        start = time.time()  # Initialize start time
+        header = header = ["t_ms", "ax", "ay", "az", "gx", "gy", "gz", "yaw", "pitch", "roll", "emg_adc"]  # Hardcoded  
+        writer.writerow(["host_time_s"] + header)
+        f.flush()
+        print(",".join(["host_time_s"] + header))
 
-        # In the header-waiting loop, add debug:
-        while header is None:
-            line = ser.readline().decode("utf-8", errors="ignore").strip()
-            print(f"DEBUG: Received line: '{line}'")  
-            if not line:
-                if time.time() - start > 8:
-                    raise RuntimeError("No header received. Busy arduino.")
-                continue
-            if "t_ms" in line and "," in line:
-                header = [h.strip() for h in line.split(",")]
-                writer.writerow(["host_time_s"] + header)
-                f.flush()
-                print(",".join(["host_time_s"] + header))
-                break
 
         # Stream rows 
         try:

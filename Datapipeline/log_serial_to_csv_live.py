@@ -37,7 +37,7 @@ def main():
             print(f"DTR reset failed: {e}")  # Add this
             pass
         writer = csv.writer(f)  # Initialize writer
-        header = header = ["t_ms", "ax", "ay", "az", "gx", "gy", "gz", "yaw", "pitch", "roll", "emg1", "emg2"]  # Hardcoded  
+        header = header = ["t_ms", "ax1", "ay1", "az1", "gx1", "gy1", "gz1", "yaw1", "pitch1", "roll1","ax2", "ay2", "az2", "gx2", "gy2", "gz2", "yaw2", "pitch2", "roll2", "emg1", "emg2"]  # Hardcoded  
         writer.writerow(["host_time_s"] + header)
         f.flush()
         print(",".join(["host_time_s"] + header))   

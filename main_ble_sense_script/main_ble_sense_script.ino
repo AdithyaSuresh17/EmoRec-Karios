@@ -18,7 +18,7 @@ void setup() {
   Serial1.begin(9600); // For UART from Uno
   delay(2000);
   pinMode(LED_BUILTIN, OUTPUT); // Initialise built in LED for debugging
-  Serial.println("t_ms,ax,ay,az,gx,gy,gz,yaw,pitch,roll,emg1_data,emg2_data");//printing header
+  Serial.println("t_ms,ax1,ay1,az1,gx1,gy1,gz1,yaw1,pitch1,roll1,ax2,ay2,az2,gx2,gy2,gz2,yaw2,pitch2,roll2,emg1_data,emg2_data");//printing header
 
 
 }
@@ -51,7 +51,7 @@ void loop() {
       Serial.print(imu1_data.y); Serial.print(",");
       Serial.print(imu1_data.avx); Serial.print(",");
       Serial.print(imu1_data.avy); Serial.print(",");
-      Serial.println(imu1_data.avz);Serial.print(",");
+      Serial.print(imu1_data.avz);Serial.print(",");
 
       // Write IMU 2 data
       Serial.print(imu2_data.ax); Serial.print(",");
@@ -62,10 +62,10 @@ void loop() {
       Serial.print(imu2_data.y); Serial.print(",");
       Serial.print(imu2_data.avx); Serial.print(",");
       Serial.print(imu2_data.avy); Serial.print(",");
-      Serial.println(imu2_data.avz);Serial.print(",");
+      Serial.print(imu2_data.avz);Serial.print(",");
 
       // Write EMG 1 data
-      Serial.println(emg1_data);Serial.print(",");
+      Serial.print(emg1_data);Serial.print(",");
 
       // Write EMG 2 data
       Serial.println(emg2_data);

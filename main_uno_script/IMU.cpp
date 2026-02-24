@@ -92,3 +92,39 @@ imuData IMU::getSensorData() {
 int IMU::getRoll() {
   return this->roll;
 }
+
+
+// Added Calibration support for IMU 
+bool IMU::isCalibrated() {
+    uint8_t sys, gyro, accel, mag;
+    // getCalibration pulls the current status from the BNO055 (0 = uncalibrated, 3 = fully calibrated)
+    bno_ptr->getCalibration(&sys, &gyro, &accel, &mag);
+    
+    // We want all sensors to be fully calibrated
+    return (sys == 3 && gyro == 3 && accel == 3 && mag == 3);
+}
+
+void IMU::printCalibrationStatus() {
+    uint8_t sys, gyro, accel, mag;
+    bno_ptr->getCalibration(&sys, &gyro, &accel, &mag);
+    
+    Serial.print("System: "); Serial.print(sys);
+    Serial.print(" | Gyro: "); Serial.print(gyro);
+    Serial.print(" | Accel: "); Serial.print(accel);
+    Serial.print(" | Mag: "); Serial.println(mag);
+}
+
+
+void IMU::calibrate() {
+    Serial.println("--- IMU Calibration Started ---");
+    Serial.println("Gyro: Leave still.");
+    Serial.println("Accel: Rest on 6 different sides.");
+    Serial.println("Mag: Move in a figure-8 pattern.");
+    
+    // This loop blocks everything until the IMU returns true for isCalibrated()
+    while (!isCalibrated()) {
+        printCalibrationStatus();
+        delay(500); // Check twice a second so we don't spam the Serial Monitor
+    }
+    Serial.println("--- IMU Fully Calibrated! ---");
+}

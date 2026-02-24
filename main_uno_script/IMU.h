@@ -19,6 +19,9 @@ class IMU {
     void init();
     imuData getSensorData();
     int getRoll();
+    void calibrate();
+    bool isCalibrated();
+    void printCalibrationStatus();   
 
   private:
     Adafruit_BNO055* bno; // Pointer to BNO object this class instance is made for

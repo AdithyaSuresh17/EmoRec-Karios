@@ -16,7 +16,7 @@ void EMG::calibrate() {
     delay(5); // Quick sampling for baseline
   }
   _baseline = sum / samples;
-}
+} 
 
 int EMG::getProcessedData() {
   int rawValue = analogRead(_pin);

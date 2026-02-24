@@ -29,15 +29,21 @@ void setup() {
   imu2.init();
 
   // --- AUTO-CALIBRATION PHASE ---
-  /*Serial.println(">>> HOLD STILL: Press button to calibrate EMGs...");
+  Serial.println(">>> HOLD STILL: Press button to calibrate EMGs...");
   while(digitalRead(buttonPin) == HIGH); // Wait for user to press button
   
-  Serial.println(">>> Calibrating Baseline...");
+  Serial.println(">>> Calibrating EMG Baselines...");
   emg1.calibrate(); // Performs the 200-sample average
   emg2.calibrate();
+
+  Serial.println(">>> EMGs done. Starting IMU 1 Calibration...");
+  imu1.calibrate();
   
-  Serial.println(">>> Calibration Complete. Starting Transmission.");
-  delay(1000);*/
+  Serial.println(">>> IMU 1 done. Starting IMU 2 Calibration...");
+  imu2.calibrate();
+
+  Serial.println(">>> ALL SENSORS FULLY CALIBRATED! Starting Transmission.");
+  delay(1000);
 }
 
 void loop() {
@@ -50,7 +56,7 @@ void loop() {
   imu_data_pkt2 = imu2.getSensorData();
   delay(50);
 
-  // 2. Gather Processed EMG Data
+  // // 2. Gather Processed EMG Data
   uint16_t processedEMG1 = (uint16_t) emg1.getProcessedData(); 
   uint16_t processedEMG2 = (uint16_t) emg2.getProcessedData();
 
@@ -69,9 +75,9 @@ void loop() {
   sense_link.write((uint8_t*)&processedEMG2, sizeof(processedEMG2));
 
   // --- DEBUG MONITORING ---
-  /*Serial.print("EMG1: "); Serial.print(processedEMG1);
+  Serial.print("EMG1: "); Serial.println(processedEMG1);
   Serial.print(" | EMG2: "); Serial.print(processedEMG2);
-  Serial.print(" | Roll1: "); Serial.print(imu_data_pkt1.r);
-  Serial.print(" | Roll2: "); Serial.println(imu_data_pkt2.r);*/
+  // Serial.print(" | Roll1: "); Serial.print(imu_data_pkt1.r);
+  // Serial.print(" | Roll2: "); Serial.println(imu_data_pkt2.r);
 
 }

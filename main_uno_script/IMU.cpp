@@ -98,7 +98,7 @@ int IMU::getRoll() {
 bool IMU::isCalibrated() {
     uint8_t sys, gyro, accel, mag;
     // getCalibration pulls the current status from the BNO055 (0 = uncalibrated, 3 = fully calibrated)
-    bno_ptr->getCalibration(&sys, &gyro, &accel, &mag);
+    bno->getCalibration(&sys, &gyro, &accel, &mag);
     
     // We want all sensors to be fully calibrated
     return (sys == 3 && gyro == 3 && accel == 3 && mag == 3);
@@ -106,7 +106,7 @@ bool IMU::isCalibrated() {
 
 void IMU::printCalibrationStatus() {
     uint8_t sys, gyro, accel, mag;
-    bno_ptr->getCalibration(&sys, &gyro, &accel, &mag);
+    bno->getCalibration(&sys, &gyro, &accel, &mag);
     
     Serial.print("System: "); Serial.print(sys);
     Serial.print(" | Gyro: "); Serial.print(gyro);

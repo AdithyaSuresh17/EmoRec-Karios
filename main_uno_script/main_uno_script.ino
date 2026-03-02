@@ -20,9 +20,9 @@ const int buttonPin = 2; // Pin for calibration toggle
 
 void setup() {
   Serial.begin(115200);
-  sense_link.begin(9600);
+  sense_link.begin(38400);
   
-  //pinMode(buttonPin, INPUT_PULLUP);
+  pinMode(buttonPin, INPUT_PULLUP);
 
   // Initialise IMUs
   imu1.init();
@@ -52,9 +52,9 @@ void loop() {
   imuData imu_data_pkt2;
   
   imu_data_pkt1 = imu1.getSensorData();
-  delay(50); // Reduced delay for better responsiveness
+  // delay(50); // Reduced delay for better responsiveness
   imu_data_pkt2 = imu2.getSensorData();
-  delay(50);
+  delay(10);
 
   // // 2. Gather Processed EMG Data
   uint16_t processedEMG1 = (uint16_t) emg1.getProcessedData(); 
@@ -77,7 +77,7 @@ void loop() {
   // --- DEBUG MONITORING ---
   Serial.print("EMG1: "); Serial.println(processedEMG1);
   Serial.print(" | EMG2: "); Serial.print(processedEMG2);
-  // Serial.print(" | Roll1: "); Serial.print(imu_data_pkt1.r);
-  // Serial.print(" | Roll2: "); Serial.println(imu_data_pkt2.r);
+  Serial.print(" | Roll1: "); Serial.print(imu_data_pkt1.r);
+  Serial.print(" | Roll2: "); Serial.println(imu_data_pkt2.r);
 
 }

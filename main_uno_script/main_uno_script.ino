@@ -75,9 +75,9 @@ void loop() {
   sense_link.write((uint8_t*)&processedEMG2, sizeof(processedEMG2));
 
   // --- DEBUG MONITORING ---
-  // Serial.print("EMG1: "); Serial.println(processedEMG1);
-  // Serial.print(" | EMG2: "); Serial.print(processedEMG2);
-  // Serial.print(" | Roll1: "); Serial.print(imu_data_pkt1.r);
-  // Serial.print(" | Roll2: "); Serial.println(imu_data_pkt2.r);
+  Serial.print("EMG1: "); Serial.println(processedEMG1);
+  Serial.print(" | EMG2: "); Serial.print(processedEMG2);
+  Serial.print(" | Roll1: "); Serial.print(imu_data_pkt1.r);
+  Serial.print(" | Roll2: "); Serial.println(imu_data_pkt2.r);
 
 }

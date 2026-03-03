@@ -17,12 +17,13 @@ def main():
         print("Usage: python3 src/log_serial_to_csv_live.py <serial_port>")
         sys.exit(1)
 
+    task_name="stress" #edit this when changing the task
+    person_name="adi" #edit this when changing the task
     port = sys.argv[1]
     OUT_DIR.mkdir(parents=True, exist_ok=True)
-    out_path = OUT_DIR / time.strftime("data_log_%d%m%Y_%H%M%S.csv")
+    out_path = OUT_DIR / f"{person_name}_7_5min_{task_name}.csv"
 
     with serial.Serial(port, BAUD, timeout=1) as ser, out_path.open("w", newline="") as f:
-        # Reset/settle helps on macOS + Uno
         
         try:
             ser.setDTR(False)

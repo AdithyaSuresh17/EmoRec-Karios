@@ -36,11 +36,11 @@ void setup() {
   emg1.calibrate(); // Performs the 200-sample average
   emg2.calibrate();
 
-  Serial.println(">>> EMGs done. Starting IMU 1 Calibration...");
-  imu1.calibrate();
+  // Serial.println(">>> EMGs done. Starting IMU 1 Calibration...");
+  // imu1.calibrate();
   
-  Serial.println(">>> IMU 1 done. Starting IMU 2 Calibration...");
-  imu2.calibrate();
+  // Serial.println(">>> IMU 1 done. Starting IMU 2 Calibration...");
+  // imu2.calibrate();
 
   Serial.println(">>> ALL SENSORS FULLY CALIBRATED! Starting Transmission.");
   delay(1000);
@@ -75,9 +75,9 @@ void loop() {
   sense_link.write((uint8_t*)&processedEMG2, sizeof(processedEMG2));
 
   // --- DEBUG MONITORING ---
-  Serial.print("EMG1: "); Serial.println(processedEMG1);
-  Serial.print(" | EMG2: "); Serial.print(processedEMG2);
-  Serial.print(" | Roll1: "); Serial.print(imu_data_pkt1.r);
-  Serial.print(" | Roll2: "); Serial.println(imu_data_pkt2.r);
+  // Serial.print("EMG1: "); Serial.println(processedEMG1);
+  // Serial.print(" | EMG2: "); Serial.print(processedEMG2);
+  // Serial.print(" | Roll1: "); Serial.print(imu_data_pkt1.r);
+  // Serial.print(" | Roll2: "); Serial.println(imu_data_pkt2.r);
 
 }

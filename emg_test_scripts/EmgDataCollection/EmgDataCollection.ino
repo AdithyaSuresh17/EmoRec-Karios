@@ -1,4 +1,4 @@
-const int emgPin = A3;
+const int emgPin = A0;
 const int buttonPin = 2;
 
 // --- DSP & SMOOTHING VARIABLES ---

@@ -59,6 +59,10 @@ uno-code/
 !log_serial_to_csv_live.py
 
 
+cnn_test.ipynb
+older-training-data
+temp_ml_env
+
 # Unit test / coverage reports
 htmlcov/
 .tox/

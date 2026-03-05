@@ -233,3 +233,13 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+Inference_data/test
+
+temp_ml_env
+older-training-data
+abc.ipynb
+cnn_test.ipynb
+fixing_csv_headers.ipynb
+
+plotting_code.ipynb
+emg_imu_flowchart_formal.html

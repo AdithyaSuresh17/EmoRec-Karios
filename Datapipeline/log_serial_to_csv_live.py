@@ -18,7 +18,7 @@ def main():
         sys.exit(1)
 
     task_name="baseline" #edit this when changing the task
-    person_name="adi2" #edit this when changing the task
+    person_name="soup" #edit this when changing the task
     port = sys.argv[1]
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     out_path = OUT_DIR / f"{person_name}_7_5min_{task_name}.csv"

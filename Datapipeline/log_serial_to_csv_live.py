@@ -17,8 +17,8 @@ def main():
         print("Usage: python3 src/log_serial_to_csv_live.py <serial_port>")
         sys.exit(1)
 
-    task_name="baseline" #edit this when changing the task
-    person_name="soup" #edit this when changing the task
+    task_name="stress" #edit this when changing the task
+    person_name="emm4" #edit this when changing the task
     port = sys.argv[1]
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     out_path = OUT_DIR / f"{person_name}_7_5min_{task_name}.csv"

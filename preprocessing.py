@@ -8,7 +8,7 @@ from typing import List, Tuple, Optional
 # Constants
 DATA_DIR = "/content/drive/MyDrive/EmoRecData"
 WINDOW_SIZE = 125
-STEP_SIZE = 32
+STEP_SIZE = 25
 
 ## Column definitions (WITH REMOVED ORIENTATION DATA)
 ## EDIT THIS DEPENDING ON IF USER WANTS TO REMOVE ORIENTATION DATA

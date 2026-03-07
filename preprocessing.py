@@ -57,7 +57,8 @@ def create_windows(data: np.ndarray, label: str) -> Tuple[List[np.ndarray], List
         # Per-window z-score normalization
         window_mean = np.mean(window, axis=0, keepdims=True)
         window_std = np.std(window, axis=0, keepdims=True)
-        window_norm = (window - window_mean) / (window_std + 1e-8)
+        # window_norm = (window - window_mean) / (window_std + 1e-8)
+        window_norm = window # TEST
         
         X_windows.append(window_norm)
         y_windows.append(label)
@@ -77,7 +78,8 @@ def get_training_files(
             "adi_7_5min_stress.csv", "adi_7_5min_focus.csv", "adi_7_5min_baseline.csv",
             "adi_7_5min_distract.csv", "louis_7_5min_distract.csv", "louis_7_5min_baseline.csv",
             "louis_7_5min_stress.csv", "louis_7_5min_focus.csv", "emmanuel_7_5min_baseline.csv",
-            "emmanuel_7_5min_distract.csv", "emmanuel_7_5min_stress.csv", "emmanuel_7_5min_focus.csv"
+            "emmanuel_7_5min_distract.csv", "emmanuel_7_5min_stress.csv", "emmanuel_7_5min_focus.csv",
+            "emm4_7_5min_baseline.csv",'emm4_7_5min_distract.csv',"emm4_7_5min_stress.csv",'emm4_7_5min_focus.csv'
         ]
     
     all_files = glob.glob(os.path.join(data_dir, "*.csv"))

@@ -38,15 +38,15 @@ class CostSensitiveLoss(nn.Module):
     [1.0, 1.0, 0.0, 1.5],  # True: Relaxed
     [1.0, 1.0, 1.0, 0.0]  # True: Stressed
 ]'''
-# penalty_grid = [
-#     [0.0, 1.0, 1.0, 1.5],  # True: Distracted
-#     [1.0, 0.0, 1.0, 1.5],  # True: Focused
-#     [1.0, 1.5, 0.0, 1.8],  # True: Relaxed
-#     [1.0, 1.0, 1.0, 0.0]  # True: Stressed
-# ]
-penalty_grid = 0.05*np.array([
+penalty_grid = [
     [0.0, 1.0, 1.0, 1.5],  # True: Distracted
     [1.0, 0.0, 1.0, 1.5],  # True: Focused
     [1.0, 1.5, 0.0, 1.8],  # True: Relaxed
     [1.0, 1.0, 1.0, 0.0]  # True: Stressed
-])
+]
+# penalty_grid = 0.05*np.array([
+#     [0.0, 1.0, 1.0, 1.5],  # True: Distracted
+#     [1.0, 0.0, 1.0, 1.5],  # True: Focused
+#     [1.0, 1.5, 0.0, 1.8],  # True: Relaxed
+#     [1.0, 1.0, 1.0, 0.0]  # True: Stressed
+# ])

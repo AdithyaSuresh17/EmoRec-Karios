@@ -49,7 +49,7 @@
 // 35ms per sample = 28.57Hz. Adjust between 33ms (30Hz) and 37ms (27Hz)
 // to match whatever rate your UNO was logging at when you recorded training data.
 // ---------------------------------------------------------------------------
-#define SAMPLE_INTERVAL_MS  35
+#define SAMPLE_INTERVAL_MS  200
 
 // ---------------------------------------------------------------------------
 // Serial link from UNO
@@ -309,19 +309,25 @@ void run_inference() {
   float* out = tfl_output->data.f;
   int    best_class = 0;
   float  best_score = out[0];
+  Serial.print("OUT: ");
+  Serial.print(out[0]);
   for (int i = 1; i < NUM_EMOTIONS; i++) {
+    Serial.print(", ");
+    Serial.print(out[i]);
     if (out[i] > best_score) {
       best_score = out[i];
       best_class = i;
+      
     }
   }
+  Serial.println("");
 
   // --- Output: millis, label, score, class_idx ---
   Serial.print(millis());
   Serial.print(",");
   Serial.print(EMOTION_LABELS[best_class]);
   Serial.print(",");
-  Serial.print(best_score, 4);
-  Serial.print(",");
-  Serial.println(best_class);
+  // Serial.print(best_score, 4);
+  // Serial.print(",");
+  // Serial.println(best_class);
 }

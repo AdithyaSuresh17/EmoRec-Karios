@@ -158,6 +158,7 @@ __pypackages__/
 #testing files
 fft.ipynb
 real_separability_plot.png
+vgg-cnn-base-uncased.svg
 
 # Celery stuff
 celerybeat-schedule

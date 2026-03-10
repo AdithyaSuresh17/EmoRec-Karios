@@ -240,6 +240,8 @@ marimo/_lsp/
 __marimo__/
 Inference_data/test
 
+
+#Unused Files and local tests
 temp_ml_env
 older-training-data
 abc.ipynb
@@ -254,5 +256,5 @@ porting_model_to_ble.ipynb
 channel_mean.npy
 channel_std.npy
 calib_data.npy
-
+emotion_inference_ble
 hello_world

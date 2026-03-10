@@ -45,7 +45,7 @@
 #define STEP_SIZE      25     // run inference every 25 new samples (matches Python)
 #define NUM_EMOTIONS    4
 
-#define SAMPLE_INTERVAL_MS  35   // ~28.5Hz — match your training logging rate
+#define SAMPLE_INTERVAL_MS 35   // ~28.5Hz — match your training logging rate
 
 // ---------------------------------------------------------------------------
 // Serial link from UNO

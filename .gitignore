@@ -256,5 +256,6 @@ porting_model_to_ble.ipynb
 channel_mean.npy
 channel_std.npy
 calib_data.npy
-emotion_inference_ble
+emotion_inference_ble/
 hello_world
+

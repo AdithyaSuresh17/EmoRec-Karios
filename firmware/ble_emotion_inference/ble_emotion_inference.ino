@@ -141,6 +141,10 @@ void setup() {
     while (true) {}
   }
 
+  Serial.print("Tensor arena used: ");
+  Serial.print(interpreter->arena_used_bytes());
+  Serial.println(" bytes");
+
   tfl_input  = interpreter->input(0);
   tfl_output = interpreter->output(0);
 
@@ -310,10 +314,12 @@ void run_inference() {
   }
 
   // ── 4. Run inference ──────────────────────────────────────────────────────
+  unsigned long t_start = millis();
   if (interpreter->Invoke() != kTfLiteOk) {
     Serial.println("ERROR: Invoke() failed");
     return;
   }
+  unsigned long inference_ms = millis() - t_start;
 
   // ── 5. Dequantize output int8 → float probabilities ──────────────────────
   // Formula: float_val = (int8_val - zero_point) * scale
@@ -337,12 +343,14 @@ void run_inference() {
   }
 
   // ── 7. Print result ───────────────────────────────────────────────────────
-  // FORMAT: millis,emotion,confidence,class_idx
+  // FORMAT: millis,emotion,confidence,class_idx,inference_ms
   Serial.print(millis());
   Serial.print(",");
   Serial.print(EMOTION_LABELS[best_class]);
   Serial.print(",");
   Serial.print(best_score, 4);
   Serial.print(",");
-  Serial.println(best_class);
+  Serial.print(best_class);
+  Serial.print(",");
+  Serial.println(inference_ms);
 }

@@ -7,21 +7,15 @@ IMU::IMU(Adafruit_BNO055* bno_ptr) {
   this->bno = bno_ptr;
 }
 
-// Sensor initialisation
 void IMU::init() {
-  
-  // Sensor initialisation
-  if(!this->bno->begin()) { // If there is a problem detecting BNO055
+  if(!this->bno->begin()) {
     Serial.print("No BNO055 detected, check wiring or I2C ADDR");
     while(1); // Do not allow script to proceed
   }
-  else {
+  } else {
     Serial.println("BNO055 detected");
   }
-  
   delay(500);
-
-  // Configure BNO055 clock source to external crystal (more precise) instead of internal oscillator
   this->bno->setExtCrystalUse(true);
 }
 
@@ -51,28 +45,6 @@ imuData IMU::getSensorData() {
   this->x_angVel = gyro_data.x();
   this->y_angVel = gyro_data.y();
   this->z_angVel = gyro_data.z();
-
-  /* DEBUGGING */
-//  Serial.print("Yaw: ");
-//  Serial.print(this->yaw);
-//  Serial.print(" || Pitch: ");
-//  Serial.print(this->pitch);
-//  Serial.print(" || Roll: ");
-//  Serial.print(this->roll);
-//
-//  Serial.print("x acc: ");
-//  Serial.print(this->x_acc);
-//  Serial.print(" || y acc: ");
-//  Serial.print(this->y_acc);
-//  Serial.print(" || z_acc: ");
-//  Serial.print(this->z_acc);
-//
-//  Serial.print("x ang vel: ");
-//  Serial.print(this->x_angVel);
-//  Serial.print(" || y ang vel: ");
-//  Serial.print(this->y_angVel);
-//  Serial.print(" || z_angVel: ");
-//  Serial.print(this->z_angVel);
 
   // Place values into an output struct
   imuData data;

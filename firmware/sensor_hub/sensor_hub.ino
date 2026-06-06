@@ -36,12 +36,6 @@ void setup() {
   emg1.calibrate(); // Performs the 200-sample average
   emg2.calibrate();
 
-  // Serial.println(">>> EMGs done. Starting IMU 1 Calibration...");
-  // imu1.calibrate();
-  
-  // Serial.println(">>> IMU 1 done. Starting IMU 2 Calibration...");
-  // imu2.calibrate();
-
   Serial.println(">>> ALL SENSORS FULLY CALIBRATED! Starting Transmission.");
   delay(1000);
 }
@@ -52,25 +46,18 @@ void loop() {
   imuData imu_data_pkt2;
   
   imu_data_pkt1 = imu1.getSensorData();
-  // delay(50); // Reduced delay for better responsiveness
   imu_data_pkt2 = imu2.getSensorData();
   delay(10);
 
-  // // 2. Gather Processed EMG Data
-  uint16_t processedEMG1 = (uint16_t) emg1.getProcessedData(); 
+  // 2. Gather Processed EMG Data
+  uint16_t processedEMG1 = (uint16_t) emg1.getProcessedData();
   uint16_t processedEMG2 = (uint16_t) emg2.getProcessedData();
 
   // 3. Send Data to BLE Sense
   const uint8_t start_byte = 0xAA;
   sense_link.write(start_byte);
-  
-  // Sending IMU 1 packet
   sense_link.write((uint8_t*)&imu_data_pkt1, sizeof(imu_data_pkt1));
-  // Sending IMU 2 packet
   sense_link.write((uint8_t*)&imu_data_pkt2, sizeof(imu_data_pkt2));
-  
-
-
   sense_link.write((uint8_t*)&processedEMG1, sizeof(processedEMG1));
   sense_link.write((uint8_t*)&processedEMG2, sizeof(processedEMG2));
 
